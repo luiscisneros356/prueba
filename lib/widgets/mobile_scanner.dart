@@ -417,6 +417,7 @@ class QRViewExample extends StatefulWidget {
 class _QRViewExampleState extends State<QRViewExample> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
+  DniData? dniData;
   QRViewController? controller;
 
   @override
@@ -453,8 +454,9 @@ class _QRViewExampleState extends State<QRViewExample> {
             Expanded(
               flex: 1,
               child: Center(
-                child: (result != null)
-                    ? Text('Código escaneado: ${result!.code}')
+                child: (dniData != null)
+                    ? Text(
+                        'Código escaneado: \n${dniData!.number}\n${dniData!.gender}\n${dniData!.issueDate}\n${dniData!.processId}')
                     : const Text('Escanea un código QR o de barras'),
               ),
             )
@@ -467,9 +469,11 @@ class _QRViewExampleState extends State<QRViewExample> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      print("ScanData");
       setState(() {
-        result = scanData;
+        print('Escaneado: ${scanData.code}');
+        final DniData? dniDataParse = DniData.parseQrDniString(scanData.code ?? "");
+
+        dniData = dniDataParse;
       });
     });
   }
@@ -481,3 +485,63 @@ class _QRViewExampleState extends State<QRViewExample> {
     super.dispose();
   }
 }
+
+class DniData {
+  // Propiedades
+  final String number;
+  final String gender;
+  final String issueDate;
+  final String processId;
+
+  // Constructor con valores por defecto
+  DniData({
+    this.number = "",
+    this.gender = "",
+    this.issueDate = "",
+    this.processId = "",
+  });
+
+  // Método estático para parsear el QR
+  static DniData? parseQrDniString(String qrDniString) {
+    try {
+      List<String> splitedData = qrDniString.split('@');
+
+      if (qrDniString[0] == '@') {
+        // Doc anterior
+        return DniData(
+          number: splitedData[1].trim(),
+          gender: splitedData[8].trim(),
+          issueDate: splitedData[9].trim(),
+          processId: splitedData[10].trim(),
+        );
+      } else {
+        // Doc actual
+        return DniData(
+          number: splitedData[4].trim(),
+          gender: splitedData[3].trim(),
+          issueDate: splitedData[7].trim(),
+          processId: splitedData[0].trim(),
+        );
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  String toString() {
+    return 'DniData(number: $number, gender: $gender, issueDate: $issueDate, processId: $processId)';
+  }
+}
+
+
+//TODO: formato de DNI
+// 00171798813@CISNEROS@LUIS@M@35109356@A@06/06/1990@07/03/2013
+
+//   final dni = "00171798813@CISNEROS@LUIS@M@35109356@A@06/06/1990@07/03/2013";
+//  List<String> splitedData = dni.split('@');
+
+//   Imprimimos los datos separados
+//   for (int i = 0; i < splitedData.length; i++) {
+//     print('Elemento $i: ${splitedData[i]}');
+//   }
