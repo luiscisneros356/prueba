@@ -3,8 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-import 'widgets/my_layout_builder.dart';
+import 'package:flutter_pruebas/widgets/mobile_scanner.dart';
 
 Future<void> main() async {
   // final luis = Luis();
@@ -69,8 +68,8 @@ class MainApp extends StatelessWidget {
         //       ),
         //     )),
 
-        // body: CameraExampleHome(),
-        body: MyOrentationBUilder(),
+        body: QRViewExample(),
+        // body: MyOrentationBUilder(),
       ),
     );
   }
