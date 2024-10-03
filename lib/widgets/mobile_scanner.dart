@@ -414,19 +414,33 @@ class QRViewExample extends StatefulWidget {
   State<StatefulWidget> createState() => _QRViewExampleState();
 }
 
-class _QRViewExampleState extends State<QRViewExample> {
+class _QRViewExampleState extends State<QRViewExample> with WidgetsBindingObserver {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   DniData? dniData;
   QRViewController? controller;
 
   @override
-  void reassemble() {
-    super.reassemble();
-    if (controller != null) {
-      controller!.pauseCamera();
-      controller!.resumeCamera();
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(controller == null);
+    if (controller == null) {
+      return;
     }
+
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      controller?.pauseCamera();
+    } else if (state == AppLifecycleState.resumed) {
+      print('App resumed');
+      controller?.resumeCamera();
+    }
+
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -440,7 +454,7 @@ class _QRViewExampleState extends State<QRViewExample> {
               flex: 4,
               child: QRView(
                 key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
+                onQRViewCreated: onQRViewCreated,
                 overlay: QrScannerOverlayShape(
                     overlayColor: Colors.red.withOpacity(0.8),
                     borderColor: Colors.blue,
@@ -466,7 +480,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
@@ -480,6 +494,7 @@ class _QRViewExampleState extends State<QRViewExample> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     controller?.stopCamera();
     controller?.dispose();
     super.dispose();
