@@ -1,108 +1,120 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-// import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
-// class MobileScannerScreen extends StatefulWidget {
-//   const MobileScannerScreen({super.key});
+class MobileScannerScreen extends StatefulWidget {
+  const MobileScannerScreen({super.key});
 
-//   @override
-//   State<MobileScannerScreen> createState() => _MobileScannerScreenState();
-// }
+  @override
+  State<MobileScannerScreen> createState() => _MobileScannerScreenState();
+}
 
-// class _MobileScannerScreenState extends State<MobileScannerScreen> with WidgetsBindingObserver {
-//   final MobileScannerController controller = MobileScannerController();
-//   StreamSubscription<Object?>? _subscription;
+class _MobileScannerScreenState extends State<MobileScannerScreen> with WidgetsBindingObserver {
+  final MobileScannerController controller = MobileScannerController();
+  StreamSubscription<Object?>? _subscription;
 
-//   void _handleBarcode(BarcodeCapture barcode) {
-//     print("Streamm");
-//     print('Barcode data: ${barcode..image}');
-//     print('Barcode type: ${barcode.barcodes.first}');
-//   }
+  void _handleBarcode(BarcodeCapture barcode) {
+    print("Streamm");
 
-//   @override
-//   void initState() {
-//     WidgetsBinding.instance.addObserver(this);
-//     // controller = MobileScannerController();
+    print('Barcode type: ${barcode.barcodes.first.displayValue}');
+  }
 
-//     // Start listening to the barcode events.
-//     _subscription = controller.barcodes.listen(_handleBarcode);
+  @override
+  void initState() {
+    // controller = MobileScannerController();
 
-//     // Finally, start the scanner itself.
-//     // unawaited(controller.start()
-//     //   controller = MobileScannerController();
-//     super.initState();
-//   }
+    // Start listening to the barcode events.
+    _subscription = controller.barcodes.listen(_handleBarcode);
 
-//   @override
-//   void didChangeAppLifecycleState(AppLifecycleState state) {
-//     // If the controller is not ready, do not try to start or stop it.
-//     // Permission dialogs can trigger lifecycle changes before the controller is ready.
-//     if (!controller.value.isInitialized) {
-//       return;
-//     }
+    // Finally, start the scanner itself.
+    controller.start();
 
-//     switch (state) {
-//       case AppLifecycleState.detached:
-//       case AppLifecycleState.hidden:
-//       case AppLifecycleState.paused:
-//         return;
-//       case AppLifecycleState.resumed:
-//         // Restart the scanner when the app is resumed.
-//         // Don't forget to resume listening to the barcode events.
-//         _subscription = controller.barcodes.listen(_handleBarcode);
+    super.initState();
+  }
 
-//         unawaited(controller.start());
-//       case AppLifecycleState.inactive:
-//         // Stop the scanner when the app is paused.
-//         // Also stop the barcode events subscription.
-//         unawaited(_subscription?.cancel());
-//         _subscription = null;
-//         unawaited(controller.stop());
-//     }
-//   }
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    _subscription = null;
+    controller.dispose();
+    super.dispose();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final scanWindow = Rect.fromCenter(
-//       center: MediaQuery.sizeOf(context).center(Offset.zero),
-//       width: 600,
-//       height: 600,
-//     );
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Mobile Scanner Example')),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             Container(
-//               color: Colors.blue,
-//               height: 100,
-//               width: double.infinity,
-//               child: MobileScanner(
-//                 controller: controller,
-//                 scanWindow: scanWindow,
-//                 errorBuilder: (p0, p1, p2) {
-//                   return Container(
-//                     color: Colors.amber,
-//                     child: Text('Error: $p0, $p1, $p2'),
-//                   );
-//                 },
-//                 onDetect: (barcodes) {
-//                   print("Detect");
-//                   // print('Detected barcodes: $barcodes');
-//                   // print('Detected barcodes: ${barcodes.barcodes.first}');
-//                   // print('Detected barcodes: ${barcodes.size}');
-//                   // print('Detected barcodes: $barcodes.image');
-//                 },
-//               ),
-//             ),
-//             // ..._fondoNegro(context),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   // If the controller is not ready, do not try to start or stop it.
+  //   // Permission dialogs can trigger lifecycle changes before the controller is ready.
+  //   if (!controller.value.isInitialized) {
+  //     return;
+  //   }
+
+  //   switch (state) {
+  //     case AppLifecycleState.detached:
+  //     case AppLifecycleState.hidden:
+  //     case AppLifecycleState.paused:
+  //       return;
+  //     case AppLifecycleState.resumed:
+  //       // Restart the scanner when the app is resumed.
+  //       // Don't forget to resume listening to the barcode events.
+  //       _subscription = controller.barcodes.listen(_handleBarcode);
+
+  //       unawaited(controller.start());
+  //     case AppLifecycleState.inactive:
+  //       // Stop the scanner when the app is paused.
+  //       // Also stop the barcode events subscription.
+  //       unawaited(_subscription?.cancel());
+  //       _subscription = null;
+  //       unawaited(controller.stop());
+  //   }
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    final scanWindow = Rect.fromCenter(
+      center: MediaQuery.sizeOf(context).center(Offset.zero),
+      width: 600,
+      height: 600,
+    );
+    return Scaffold(
+      appBar: AppBar(title: const Text('Mobile Scanner Example')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              color: Colors.blue,
+              height: 100,
+              width: double.infinity,
+              child: MobileScanner(
+                controller: controller,
+                scanWindow: scanWindow,
+                errorBuilder: (p0, p1, p2) {
+                  return Container(
+                    color: Colors.amber,
+                    child: Text('Error: $p0, $p1, $p2'),
+                  );
+                },
+                onDetect: (barcodes) {
+                  for (var element in barcodes.barcodes) {
+                    print('Barcode: ${element.rawValue ?? "NADA en resvalue"}');
+                    print('Barcode: ${element.displayValue ?? "NADA"}');
+                  }
+                  print("Detect");
+                  // print('Detected barcodes: $barcodes');
+                  // print('Detected barcodes: ${barcodes.barcodes.first}');
+                  // print('Detected barcodes: ${barcodes.size}');
+                  // print('Detected barcodes: $barcodes.image');
+                },
+              ),
+            ),
+            // ..._fondoNegro(context),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 // // List<Widget> _fondoNegro(BuildContext context) {
 // //   final size = MediaQuery.of(context).size;
@@ -407,99 +419,99 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 //   }
 // }
 
-class QRViewExample extends StatefulWidget {
-  const QRViewExample({super.key});
+// class QRViewExample extends StatefulWidget {
+//   const QRViewExample({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
-}
+//   @override
+//   State<StatefulWidget> createState() => _QRViewExampleState();
+// }
 
-class _QRViewExampleState extends State<QRViewExample> with WidgetsBindingObserver {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  DniData? dniData;
-  QRViewController? controller;
+// class _QRViewExampleState extends State<QRViewExample> with WidgetsBindingObserver {
+//   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+//   Barcode? result;
+//   DniData? dniData;
+//   QRViewController? controller;
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
+//   @override
+//   void initState() {
+//     WidgetsBinding.instance.addObserver(this);
+//     super.initState();
+//   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print(controller == null);
-    if (controller == null) {
-      return;
-    }
+//   @override
+//   void didChangeAppLifecycleState(AppLifecycleState state) {
+//     print(controller == null);
+//     if (controller == null) {
+//       return;
+//     }
 
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
-      controller?.pauseCamera();
-    } else if (state == AppLifecycleState.resumed) {
-      print('App resumed');
-      controller?.resumeCamera();
-    }
+//     if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+//       controller?.pauseCamera();
+//     } else if (state == AppLifecycleState.resumed) {
+//       print('App resumed');
+//       controller?.resumeCamera();
+//     }
 
-    super.didChangeAppLifecycleState(state);
-  }
+//     super.didChangeAppLifecycleState(state);
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Escanear código QR/Barcode')),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: onQRViewCreated,
-                overlay: QrScannerOverlayShape(
-                    overlayColor: Colors.red.withOpacity(0.8),
-                    borderColor: Colors.blue,
-                    borderRadius: 0,
-                    borderLength: 0,
-                    borderWidth: 0,
-                    cutOutHeight: 100,
-                    cutOutWidth: double.infinity),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: (dniData != null)
-                    ? Text(
-                        'Código escaneado: \n${dniData!.number}\n${dniData!.gender}\n${dniData!.issueDate}\n${dniData!.processId}')
-                    : const Text('Escanea un código QR o de barras'),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return SafeArea(
+//       child: Scaffold(
+//         appBar: AppBar(title: const Text('Escanear código QR/Barcode')),
+//         body: Column(
+//           children: <Widget>[
+//             Expanded(
+//               flex: 4,
+//               child: QRView(
+//                 key: qrKey,
+//                 onQRViewCreated: onQRViewCreated,
+//                 overlay: QrScannerOverlayShape(
+//                     overlayColor: Colors.red.withOpacity(0.8),
+//                     borderColor: Colors.blue,
+//                     borderRadius: 0,
+//                     borderLength: 0,
+//                     borderWidth: 0,
+//                     cutOutHeight: 100,
+//                     cutOutWidth: double.infinity),
+//               ),
+//             ),
+//             Expanded(
+//               flex: 1,
+//               child: Center(
+//                 child: (dniData != null)
+//                     ? Text(
+//                         'Código escaneado: \n${dniData!.number}\n${dniData!.gender}\n${dniData!.issueDate}\n${dniData!.processId}')
+//                     : const Text('Escanea un código QR o de barras'),
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-  void onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        print('Escaneado: ${scanData.code}');
-        final DniData? dniDataParse = DniData.parseQrDniString(scanData.code ?? "");
+//   void onQRViewCreated(QRViewController controller) {
+//     this.controller = controller;
+//     controller.scannedDataStream.listen((scanData) {
+//       setState(() {
+//         print('Escaneado: ${scanData.code}');
+//         final DniData? dniDataParse = DniData.parseQrDniString(scanData.code ?? "");
 
-        dniData = dniDataParse;
-      });
-    });
-  }
+//         dniData = dniDataParse;
+//       });
+//     });
+//   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    controller?.stopCamera();
-    controller?.dispose();
-    super.dispose();
-  }
-}
+//   @override
+//   void dispose() {
+//     WidgetsBinding.instance.removeObserver(this);
+//     controller?.stopCamera();
+//     controller?.dispose();
+//     super.dispose();
+//   }
+// }
 
 class DniData {
   // Propiedades

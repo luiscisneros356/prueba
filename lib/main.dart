@@ -3,7 +3,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pruebas/widgets/mobile_scanner.dart';
+
+import 'widgets/mobile_screen_2.dart';
 
 Future<void> main() async {
   // final luis = Luis();
@@ -68,7 +69,7 @@ class MainApp extends StatelessWidget {
         //       ),
         //     )),
 
-        body: QRViewExample(),
+        body: MobileScreen2(),
         // body: MyOrentationBUilder(),
       ),
     );

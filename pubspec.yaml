@@ -9,9 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
- 
-  qr_code_scanner: ^1.0.1
- 
+  mobile_scanner: ^5.2.3
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
