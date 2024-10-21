@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'widgets/mobile_screen_2.dart';
+import 'widgets/image_picjker_widget.dart';
 
 Future<void> main() async {
   // final luis = Luis();
@@ -69,7 +69,7 @@ class MainApp extends StatelessWidget {
         //       ),
         //     )),
 
-        body: MobileScreen2(),
+        body: ImagePickerWodget(),
         // body: MyOrentationBUilder(),
       ),
     );
