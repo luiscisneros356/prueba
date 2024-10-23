@@ -4,9 +4,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'widgets/image_picjker_widget.dart';
+import 'widgets/selfie_camera_widget.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // final luis = Luis();
 
   // await Future.delayed(const Duration(seconds: 2));
@@ -48,29 +49,44 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        // appBar: PreferredSize(
-        //     preferredSize: const Size.fromHeight(80.0),
-        //     child: Container(
-        //       height: 120,
-        //       decoration: const BoxDecoration(
-        //         gradient: LinearGradient(
-        //           colors: [Colors.blue, Colors.green],
-        //           begin: Alignment.topCenter,
-        //           end: Alignment.bottomCenter,
-        //         ),
-        //       ),
-        //       child: const SafeArea(
-        //         child: ListTile(
-        //           title: Text('App Bar', style: TextStyle(fontSize: 30, color: Colors.white)),
-        //           subtitle: Text('This is a custom app bar', style: TextStyle(fontSize: 20, color: Colors.white)),
-        //         ),
-        //       ),
-        //     )),
+    return MaterialApp(
+      home: Builder(
+        builder: (context) => Scaffold(
+          // appBar: PreferredSize(
+          //     preferredSize: const Size.fromHeight(80.0),
+          //     child: Container(
+          //       height: 120,
+          //       decoration: const BoxDecoration(
+          //         gradient: LinearGradient(
+          //           colors: [Colors.blue, Colors.green],
+          //           begin: Alignment.topCenter,
+          //           end: Alignment.bottomCenter,
+          //         ),
+          //       ),
+          //       child: const SafeArea(
+          //         child: ListTile(
+          //           title: Text('App Bar', style: TextStyle(fontSize: 30, color: Colors.white)),
+          //           subtitle: Text('This is a custom app bar', style: TextStyle(fontSize: 20, color: Colors.white)),
+          //         ),
+          //       ),
+          //     )),
 
-        body: ImagePickerWodget(),
-        // body: MyOrentationBUilder(),
+          body: Container(
+            height: 500,
+            width: 500,
+            color: Colors.orange,
+          ),
+          // body: MyOrentationBUilder(),
+
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              final route = MaterialPageRoute(builder: (context) => const SelfieCameraScreen());
+
+              Navigator.push(context, route);
+            },
+            backgroundColor: Colors.red,
+          ),
+        ),
       ),
     );
   }
