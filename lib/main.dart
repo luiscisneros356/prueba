@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'widgets/selfie_camera_widget.dart';
 
 Future<void> main() async {
+  print("esto es una prueba");
   WidgetsFlutterBinding.ensureInitialized();
   // final luis = Luis();
 
