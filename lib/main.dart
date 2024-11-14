@@ -11,6 +11,7 @@ Future<void> main() async {
   print("esto es DEV");
   WidgetsFlutterBinding.ensureInitialized();
   // final luis = Luis();
+  print("esto es una prueba 2");
 
   // await Future.delayed(const Duration(seconds: 2));
 
@@ -19,6 +20,7 @@ Future<void> main() async {
   // await Future.delayed(const Duration(seconds: 2));
 
   // print('Inicio del programa');
+
   // // Timer.periodic(const Duration(seconds: 1), (timer) {
   // //   print(timer.tick);
   // // });
