@@ -26,7 +26,7 @@ class _SelfieCameraScreenState extends State<SelfieCameraScreen> {
   void initState() {
     _initializeCamera();
     // Image prueba2 = Image.file(prueba);
-
+    print("prueba: $prueba");
     final p = prueba.readAsBytesSync();
     final a = base64Encode(p);
 
@@ -36,7 +36,8 @@ class _SelfieCameraScreenState extends State<SelfieCameraScreen> {
   Future<void> _initializeCamera() async {
     _cameras = await availableCameras();
 
-    final frontCamera = _cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
+    final frontCamera =
+        _cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
 
     _cameraController = CameraController(
       frontCamera,
@@ -86,7 +87,8 @@ class _SelfieCameraScreenState extends State<SelfieCameraScreen> {
               child: Container(
                 width: 300,
                 height: 300,
-                decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 2), color: Colors.transparent),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.red, width: 2), color: Colors.transparent),
                 child: CameraPreview(
                   _cameraController!,
                 ),
